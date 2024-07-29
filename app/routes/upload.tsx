@@ -32,6 +32,13 @@ export async function loader({ context }: LoaderFunctionArgs) {
   });
 }
 
+// アクションのレスポンス型を定義
+interface ActionResponse {
+  name: string | null;
+  image: string | null;
+  error: string | null;
+}
+
 export async function action({ request, context }: ActionFunctionArgs) {
   const env = context.cloudflare.env;
 
@@ -53,9 +60,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   const formData = await parseMultipartFormData(request, uploadHandler);
   const name = formData.get("name") as string;
-  const image = formData.get("image");
+  const image = formData.get("image") as string;
 
-  return json({ name, image });
+  return json<ActionResponse>({ name, image, error: null });
 }
 
 export default function Upload() {
@@ -74,8 +81,11 @@ export default function Upload() {
               alt=""
             />
           </div>
-          <Form method="delete">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Form method="delete" action={`/upload/${actionData.image}`}>
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
               Delete
             </button>
           </Form>
