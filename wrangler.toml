@@ -1,6 +1,6 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "cf-images-sample"
 compatibility_date = "2024-07-25"
+name = "cf-images-sample"
 pages_build_output_dir = "./build/client"
 
 # Automatically place your workloads in an optimal location to minimize latency.
@@ -83,3 +83,8 @@ pages_build_output_dir = "./build/client"
 # [[env.production.kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
 # id = "<PRODUCTION_NAMESPACE_ID>"
+
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_id = "${CLOUDFLARE_D1_DB_ID}" 
+database_name = "prod-cf-images"
